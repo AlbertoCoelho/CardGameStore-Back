@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
 import db from "../db.js";
 
-export async function login(req, res) {
+const login = async (req,res) => {
   const { email,password } = req.body;
 
   try {
@@ -22,3 +22,5 @@ export async function login(req, res) {
     res.status(500).send("Error logging in user.");
   }
 }
+
+export default login;
