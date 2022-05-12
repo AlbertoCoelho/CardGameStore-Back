@@ -2,7 +2,7 @@ import db from "../db.js";
 
 export async function addProduct(req, res) {
   const { user } = req.locals;
-  const productId = req.body; // {_id}
+  const { productId } = req.body;
 
   try {
     const product = await db
