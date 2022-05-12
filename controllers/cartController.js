@@ -9,7 +9,7 @@ export async function addProduct(req, res) {
       .collection("products")
       .findOne({ _id: productId })
       .toArray();
-    await db.collection("cart").insertOne({ ...product, user: user });
+    await db.collection("cart").insertOne({ ...product, ...user });
     res.sendStatus(201);
   } catch (e) {
     console.log(e);

@@ -8,8 +8,8 @@ import tokenMiddleware from "../middlewares/tokenMiddleware.js";
 
 const cartRouter = Router();
 
-cartRouter.get("/cart", tokenMiddleware, getProducts);
 cartRouter.post("/cart", tokenMiddleware, addProduct);
+cartRouter.get("/cart", tokenMiddleware, getProducts);
 cartRouter.delete("/cart", tokenMiddleware, deleteProduct);
 
 export default cartRouter;
