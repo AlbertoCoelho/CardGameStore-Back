@@ -9,10 +9,10 @@ export async function signUp(req, res) {
     const passwordHash = bcrypt.hashSync(user.password, SALT);
     delete user.confirmPassword;
 
-    await db.collection('users').insertOne({ ...user, password: passwordHash}); 
+    const users = await db.collection('users').insertOne({ ...user, password: passwordHash}); 
 
     const cartCollection = db.collection("cart");
-    await cartCollection.insertOne({ userId: userData.insertedId, products: [] });
+    await cartCollection.insertOne({ userId: users.insertedId, products: [] });
     res.sendStatus(201);
   } catch (e) {
     console.log(e);
