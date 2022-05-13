@@ -7,8 +7,7 @@ export async function addProduct(req, res) {
   try {
     const product = await db
       .collection("products")
-      .findOne({ _id: productId })
-      .toArray();
+      .findOne({ _id: productId });
     await db
       .collection("cart")
       .insertOne({ productId: product[0]._id, user: user._id });
