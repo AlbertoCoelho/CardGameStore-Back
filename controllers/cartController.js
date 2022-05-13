@@ -9,7 +9,9 @@ export async function addProduct(req, res) {
       .collection("products")
       .findOne({ _id: productId })
       .toArray();
-    await db.collection("cart").insertOne({ ...product, user: user });
+    await db
+      .collection("cart")
+      .insertOne({ productId: product[0]._id, user: user._id });
     res.sendStatus(201);
   } catch (e) {
     console.log(e);
@@ -23,7 +25,7 @@ export async function getProducts(req, res) {
   try {
     const products = await db
       .collection("products")
-      .findMany({ user: user })
+      .findMany({ user: user._id })
       .toArray();
     res.send(products);
   } catch (e) {
@@ -39,7 +41,7 @@ export async function deleteProduct(req, res) {
   try {
     const product = await db
       .collection("cart")
-      .findOne({ _id: productId, user: user })
+      .findOne({ productId: productId, user: user._id })
       .toArray();
     await db.collection("cart").deleteOne({ ...product });
     res.sendStatus(201);
