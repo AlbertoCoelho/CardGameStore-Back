@@ -10,7 +10,7 @@ export async function addProduct(req, res) {
       .findOne({ _id: productId });
     await db
       .collection("cart")
-      .insertOne({ productId: product[0]._id, user: user._id });
+      .insertOne({ productId: product._id, user: user._id });
     res.sendStatus(201);
   } catch (e) {
     console.log(e);
