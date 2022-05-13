@@ -1,7 +1,7 @@
 import db from "../db.js";
 
 export async function addProduct(req, res) {
-  const { user } = req.locals;
+  const { user } = res.locals;
   const { productId } = req.body;
 
   try {
@@ -20,7 +20,7 @@ export async function addProduct(req, res) {
 }
 
 export async function getProducts(req, res) {
-  const { user } = req.locals;
+  const { user } = res.locals;
 
   try {
     const products = await db
@@ -35,7 +35,7 @@ export async function getProducts(req, res) {
 }
 
 export async function deleteProduct(req, res) {
-  const { user } = req.locals;
+  const { user } = res.locals;
   const productId = req.body; // {_id}
 
   try {
