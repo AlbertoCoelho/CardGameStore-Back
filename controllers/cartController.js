@@ -1,17 +1,16 @@
 import db from "../db.js";
 
 export async function addProduct(req, res) {
-  const { user } = req.locals;
+  const { user } = res.locals;
   const { productId } = req.body;
 
   try {
     const product = await db
       .collection("products")
-      .findOne({ _id: productId })
-      .toArray();
+      .findOne({ _id: productId });
     await db
       .collection("cart")
-      .insertOne({ productId: product[0]._id, user: user._id });
+      .insertOne({ productId: product._id, user: user._id });
     res.sendStatus(201);
   } catch (e) {
     console.log(e);
@@ -20,7 +19,7 @@ export async function addProduct(req, res) {
 }
 
 export async function getProducts(req, res) {
-  const { user } = req.locals;
+  const { user } = res.locals;
 
   try {
     const products = await db
@@ -35,7 +34,7 @@ export async function getProducts(req, res) {
 }
 
 export async function deleteProduct(req, res) {
-  const { user } = req.locals;
+  const { user } = res.locals;
   const productId = req.body; // {_id}
 
   try {
