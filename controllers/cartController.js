@@ -9,7 +9,6 @@ export async function addProduct(req, res) {
     const cartCollection = db.collection("cart");
     let userCart = await cartCollection.findOne({ userId: user._id });
 
-
     if (!userCart) {
       await cartCollection.insertOne({ userId: user._id, products: [] });
       userCart = await cartCollection.findOne({ userId: user._id });
@@ -29,7 +28,7 @@ export async function addProduct(req, res) {
   }
 }
 
-export async function getProducts(req, res) {
+export async function getCartProducts(req, res) {
   const { user } = res.locals;
 
   try {
