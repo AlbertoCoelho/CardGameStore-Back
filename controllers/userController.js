@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 
 export async function signUp(req, res) {
   const user = req.body;
+  const blabla = "blabla";
    
   try {
     const SALT = 10;
