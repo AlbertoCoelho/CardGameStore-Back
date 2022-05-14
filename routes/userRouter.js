@@ -5,6 +5,6 @@ import validateToken from "../middlewares/tokenMiddleware.js";
 
 const userRouter = Router();
 
-userRouter.post('/users', userMiddleware, signUp);
+userRouter.post('/sign-up', userMiddleware, signUp);
 
 export default userRouter;
