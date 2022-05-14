@@ -9,7 +9,6 @@ export async function addProduct(req, res) {
     const cartCollection = db.collection("cart");
     let userCart = await cartCollection.findOne({ userId: user._id });
 
-
     if (!userCart) {
       await cartCollection.insertOne({ userId: user._id, products: [] });
       userCart = await cartCollection.findOne({ userId: user._id });
@@ -29,7 +28,7 @@ export async function addProduct(req, res) {
   }
 }
 
-export async function getProducts(req, res) {
+export async function getCartProducts(req, res) {
   const { user } = res.locals;
 
   try {
@@ -39,6 +38,7 @@ export async function getProducts(req, res) {
     if (!userCart) {
       return res.sendStatus(404);
     }
+
     res.send(userCart);
   } catch (e) {
     console.log(e);
@@ -46,7 +46,7 @@ export async function getProducts(req, res) {
   }
 }
 
-// NÃO ESTÁ CERTA
+// NÃO ESTÁ CERTA - corrigir
 export async function deleteProduct(req, res) {
   const { user } = res.locals;
   const productId = req.body; // {_id}
