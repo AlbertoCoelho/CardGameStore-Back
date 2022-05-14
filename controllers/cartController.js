@@ -38,6 +38,7 @@ export async function getCartProducts(req, res) {
     if (!userCart) {
       return res.sendStatus(404);
     }
+
     res.send(userCart);
   } catch (e) {
     console.log(e);
@@ -45,7 +46,7 @@ export async function getCartProducts(req, res) {
   }
 }
 
-// NÃO ESTÁ CERTA
+// NÃO ESTÁ CERTA - corrigir
 export async function deleteProduct(req, res) {
   const { user } = res.locals;
   const productId = req.body; // {_id}
