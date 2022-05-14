@@ -9,15 +9,19 @@ export async function addProduct(req, res) {
     const cartCollection = db.collection("cart");
     let userCart = await cartCollection.findOne({ userId: user._id });
 
-    if(!userCart){
-      await cartCollection.insertOne({ userId: user._id, products: [] })
-      userCart = await cartCollection.findOne({ userId: user._id })
+
+    if (!userCart) {
+      await cartCollection.insertOne({ userId: user._id, products: [] });
+      userCart = await cartCollection.findOne({ userId: user._id });
     }
 
     const allProducts = db.collection("products");
-    const product = await allProducts.findOne({ _id: new ObjectId(productId) })
+    const product = await allProducts.findOne({ _id: new ObjectId(productId) });
 
-    await cartCollection.updateOne({ _id: userCart._id }, { $push: { "products" : product }})
+    await cartCollection.updateOne(
+      { _id: userCart._id },
+      { $push: { products: product } }
+    );
     res.sendStatus(200);
   } catch (err) {
     console.log(err);
@@ -29,17 +33,20 @@ export async function getProducts(req, res) {
   const { user } = res.locals;
 
   try {
-    const products = await db
-      .collection("products")
-      .findMany({ user: user._id })
-      .toArray();
-    res.send(products);
+    const cartCollection = db.collection("cart");
+    const userCart = await cartCollection.findOne({ userId: user._id });
+
+    if (!userCart) {
+      return res.sendStatus(404);
+    }
+    res.send(userCart);
   } catch (e) {
     console.log(e);
     res.sendStatus(500);
   }
 }
 
+// NÃO ESTÁ CERTA
 export async function deleteProduct(req, res) {
   const { user } = res.locals;
   const productId = req.body; // {_id}
@@ -47,8 +54,7 @@ export async function deleteProduct(req, res) {
   try {
     const product = await db
       .collection("cart")
-      .findOne({ productId: productId, user: user._id })
-      .toArray();
+      .findOne({ products: { _id: productId } });
     await db.collection("cart").deleteOne({ ...product });
     res.sendStatus(201);
   } catch (e) {
