@@ -75,10 +75,12 @@ export async function makePurchase(req, res) {
 
   try {
     const userPurchaseCollection = db.collection("userPurchase");
+
     await userPurchaseCollection.insertOne({
       userId: user._id,
       products: [...products],
     });
+    
     res.sendStatus(200);
   } catch (err) {
     console.log(err);
