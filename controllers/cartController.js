@@ -9,7 +9,6 @@ export async function addProduct(req, res) {
     const cartCollection = db.collection("cart");
     let userCart = await cartCollection.findOne({ userId: user._id });
 
-
     if (!userCart) {
       await cartCollection.insertOne({ userId: user._id, products: [] });
       userCart = await cartCollection.findOne({ userId: user._id });
@@ -29,7 +28,7 @@ export async function addProduct(req, res) {
   }
 }
 
-export async function getProducts(req, res) {
+export async function getCartProducts(req, res) {
   const { user } = res.locals;
 
   try {
@@ -39,6 +38,7 @@ export async function getProducts(req, res) {
     if (!userCart) {
       return res.sendStatus(404);
     }
+
     res.send(userCart);
   } catch (e) {
     console.log(e);
@@ -46,32 +46,39 @@ export async function getProducts(req, res) {
   }
 }
 
-// NÃO ESTÁ CERTA
 export async function deleteProduct(req, res) {
   const { user } = res.locals;
-  const productId = req.body; // {_id}
+  const productIndex = req.body; // {index}
 
   try {
-    const product = await db
-      .collection("cart")
-      .findOne({ products: { _id: productId } });
-    await db.collection("cart").deleteOne({ ...product });
-    res.sendStatus(201);
+    const cartCollection = db.collection("cart");
+    const userCart = await cartCollection.findOne({ userId: user._id });
+
+    let productsArray = userCart.products;
+    productsArray.splice(productIndex, 1);
+
+    await cartCollection.updateOne(
+      { _id: userCart._id },
+      { $set: { products: productsArray } }
+    );
+
+    res.send(productsArray);
   } catch (e) {
     console.log(e);
     res.sendStatus(500);
   }
 }
 
-export async function makePurchase(req,res) {
+export async function makePurchase(req, res) {
   const { user } = res.locals;
   const { products } = req.body;
 
   try {
     const userPurchaseCollection = db.collection("userPurchase");
     await userPurchaseCollection.insertOne({userId: user._id, products});
+
     res.sendStatus(200);
-  } catch(err){
+  } catch (err) {
     console.log(err);
     res.sendStatus(500);
   }
