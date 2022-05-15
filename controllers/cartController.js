@@ -54,11 +54,12 @@ export async function deleteProduct(req, res) {
     const cartCollection = db.collection("cart");
     const userCart = await cartCollection.findOne({ userId: user._id });
 
-    const productsArray = userCart.products;
+    let productsArray = userCart.products;
+    productsArray.splice(productIndex, 1);
 
     await cartCollection.updateOne(
       { _id: userCart._id },
-      { $set: { products: productsArray.splice(productIndex, 1) } }
+      { $set: { products: productsArray } }
     );
 
     res.send(productsArray);
