@@ -46,32 +46,43 @@ export async function getCartProducts(req, res) {
   }
 }
 
-// NÃO ESTÁ CERTA - corrigir
+// TESTANDO
 export async function deleteProduct(req, res) {
   const { user } = res.locals;
-  const productId = req.body; // {_id}
+  const productIndex = req.body; // {index}
 
   try {
-    const product = await db
-      .collection("cart")
-      .findOne({ products: { _id: productId } });
-    await db.collection("cart").deleteOne({ ...product });
-    res.sendStatus(201);
+    const cartCollection = db.collection("cart");
+    const userCart = await cartCollection.findOne({ userId: user._id });
+
+    const productsArray = userCart.products;
+
+    await cartCollection.updateOne(
+      { _id: userCart._id },
+      { $set: { products: productsArray.splice(productIndex, 1) } }
+    );
+
+    res.send(productsArray);
   } catch (e) {
     console.log(e);
     res.sendStatus(500);
   }
 }
 
-export async function makePurchase(req,res) {
+export async function makePurchase(req, res) {
   const { user } = res.locals;
   const { products } = req.body;
 
   try {
     const userPurchaseCollection = db.collection("userPurchase");
-    await userPurchaseCollection.insertOne({userId: user._id, products: [...products]});
+
+    await userPurchaseCollection.insertOne({
+      userId: user._id,
+      products: [...products],
+    });
+    
     res.sendStatus(200);
-  } catch(err){
+  } catch (err) {
     console.log(err);
     res.sendStatus(500);
   }
