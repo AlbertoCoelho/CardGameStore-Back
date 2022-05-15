@@ -3,13 +3,17 @@ import {
   getCartProducts,
   addProduct,
   deleteProduct,
+  makePurchase,
 } from "../controllers/cartController.js";
-import tokenMiddleware from "../middlewares/tokenMiddleware.js";
+import validateToken from "../middlewares/tokenMiddleware.js";
 
 const cartRouter = Router();
 
-cartRouter.post("/cart", tokenMiddleware, addProduct);
-cartRouter.get("/cart", tokenMiddleware, getCartProducts);
-cartRouter.delete("/cart", tokenMiddleware, deleteProduct);
+cartRouter.use(validateToken);
+
+cartRouter.post("/cart", addProduct);
+cartRouter.get("/cart", getCartProducts);
+cartRouter.delete("/cart", deleteProduct);
+cartRouter.post("/purchase", validateToken, makePurchase);
 
 export default cartRouter;

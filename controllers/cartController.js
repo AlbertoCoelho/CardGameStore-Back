@@ -62,3 +62,17 @@ export async function deleteProduct(req, res) {
     res.sendStatus(500);
   }
 }
+
+export async function makePurchase(req,res) {
+  const { user } = res.locals;
+  const { products } = req.body;
+
+  try {
+    const userPurchaseCollection = db.collection("userPurchase");
+    await userPurchaseCollection.insertOne({userId: user._id, products: products});
+    res.sendStatus(200);
+  } catch(err){
+    console.log(err);
+    res.sendStatus(500);
+  }
+}
