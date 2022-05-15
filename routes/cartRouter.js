@@ -14,6 +14,6 @@ cartRouter.use(validateToken);
 cartRouter.post("/cart", addProduct);
 cartRouter.get("/cart", getCartProducts);
 cartRouter.delete("/cart", deleteProduct);
-cartRouter.post("/purchase", validateToken, makePurchase);
+cartRouter.post("/purchase", makePurchase);
 
 export default cartRouter;
