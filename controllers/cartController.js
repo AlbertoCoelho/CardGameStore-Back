@@ -48,13 +48,13 @@ export async function getCartProducts(req, res) {
 
 export async function deleteProduct(req, res) {
   const { user } = res.locals;
-  const productIndex = req.body.index; // {index}
+  const { productIndex } = req.body;
 
   try {
     const cartCollection = db.collection("cart");
     const userCart = await cartCollection.findOne({ userId: user._id });
 
-    let productsArray = userCart.products;
+    let productsArray = [...userCart.products];
     productsArray.splice(productIndex, 1);
 
     await cartCollection.updateOne(
