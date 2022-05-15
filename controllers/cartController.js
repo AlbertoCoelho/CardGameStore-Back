@@ -48,7 +48,7 @@ export async function getCartProducts(req, res) {
 
 export async function deleteProduct(req, res) {
   const { user } = res.locals;
-  const productIndex = req.body; // {index}
+  const productIndex = req.body.index; // {index}
 
   try {
     const cartCollection = db.collection("cart");
@@ -78,7 +78,7 @@ export async function makePurchase(req, res) {
 
     await userPurchaseCollection.insertOne({
       userId: user._id,
-      products: [...products],
+      products,
     });
 
     res.sendStatus(200);
