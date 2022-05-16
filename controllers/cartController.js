@@ -46,28 +46,29 @@ export async function getCartProducts(req, res) {
   }
 }
 
-export async function deleteProduct(req, res) {
-  const { user } = res.locals;
-  const { productIndex } = req.body;
+// FIXME: ERRO AO DELETAR O PRODUTO
+// export async function deleteProduct(req, res) {
+//   const { user } = res.locals;
+//   const { productIndex } = req.body;
 
-  try {
-    const cartCollection = db.collection("cart");
-    const userCart = await cartCollection.findOne({ userId: user._id });
+//   try {
+//     const cartCollection = db.collection("cart");
+//     const userCart = await cartCollection.findOne({ userId: user._id });
 
-    let productsArray = [...userCart.products];
-    productsArray.splice(productIndex, 1);
+//     const productsArray = userCart.products;
+//     productsArray.splice(productIndex, 1);
 
-    await cartCollection.updateOne(
-      { _id: userCart._id },
-      { $set: { products: productsArray } }
-    );
+//     await cartCollection.updateOne(
+//       { _id: userCart._id },
+//       { $set: { products: [...productsArray] } }
+//     );
 
-    res.send(productsArray);
-  } catch (e) {
-    console.log(e);
-    res.sendStatus(500);
-  }
-}
+//     res.send([...productsArray]);
+//   } catch (e) {
+//     console.log(e);
+//     res.sendStatus(500);
+//   }
+// }
 
 export async function makePurchase(req, res) {
   const { user } = res.locals;
