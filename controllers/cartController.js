@@ -71,14 +71,14 @@ export async function deleteProduct(req, res) {
 
 export async function makePurchase(req, res) {
   const { user } = res.locals;
-  const { products } = req.body;
+  const products = req.body;
 
   try {
     const userPurchaseCollection = db.collection("userPurchase");
 
     await userPurchaseCollection.insertOne({
       userId: user._id,
-      products,
+      products: products
     });
 
     res.sendStatus(200);
