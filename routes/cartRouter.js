@@ -2,7 +2,6 @@ import { Router } from "express";
 import {
   getCartProducts,
   addProduct,
-  deleteProduct,
   makePurchase,
 } from "../controllers/cartController.js";
 import validateToken from "../middlewares/tokenMiddleware.js";
@@ -13,7 +12,8 @@ cartRouter.use(validateToken);
 
 cartRouter.post("/cart", addProduct);
 cartRouter.get("/cart", getCartProducts);
-cartRouter.delete("/cart", deleteProduct);
+// FIXME: ERRO AO DELETAR PRODUTO
+// cartRouter.delete("/cart", deleteProduct);
 cartRouter.post("/purchase", makePurchase);
 
 export default cartRouter;
